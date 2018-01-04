@@ -22,7 +22,7 @@ function varargout = ImageSegmentation(varargin)
 
 % Edit the above text to modify the response to help ImageSegmentation
 
-% Last Modified by GUIDE v2.5 15-Dec-2016 18:55:46
+% Last Modified by GUIDE v2.5 04-Jan-2018 07:43:03
 
 % Begin initialization code - DO1 NOT EDIT
 gui_Singleton = 1;
@@ -99,6 +99,7 @@ set(handles.name1,'Visible','on')
 set(handles.name1,'string',filename);
 set(handles.pop1,'Enable','on')
 set(handles.process1,'Enable','on')
+set(handles.htg01,'Enable','on')
 
 % --- Executes on button press in open2.
 function open2_Callback(hObject, eventdata, handles)
@@ -125,6 +126,7 @@ set(handles.name2,'Visible','on')
 set(handles.name2,'string',filename);
 set(handles.pop2,'Enable','on')
 set(handles.process2,'Enable','on')
+set(handles.htg02,'Enable','on')
 
 % --- Executes on button press in process1.
 function process1_Callback(hObject, eventdata, handles)
@@ -331,8 +333,13 @@ global outImg1
   [filename,pathname]=uiputfile({'*.jpg','JPEG Files(*.jpg)';... 
            '*.bmp','Bitmap Files(*.bmp)';'*.gif','GIF Files(*.gif)';... 
            '*.tif','TIFF Files(*.tif)';... 
-           '*.*','all image file'},'Save as!'); 
-  imwrite(outImg1,[pathname,filename]);
+           '*.*','all image file'},'Save as!');
+  if isequal(filename,0) || isequal(pathname,0)
+    disp('Cancel save')
+  else
+    disp(['Saved to ',fullfile(pathname,filename)])
+    imwrite(outImg1,[pathname,filename]);
+  end
 
 
 % --- Executes on button press in save2.
@@ -346,7 +353,12 @@ global outImg2
            '*.bmp','Bitmap Files(*.bmp)';'*.gif','GIF Files(*.gif)';... 
            '*.tif','TIFF Files(*.tif)';... 
            '*.*','all image file'},'Save as!'); 
-  imwrite(outImg2,[pathname,filename]);
+  if isequal(filename,0) || isequal(pathname,0)
+    disp('Cancel save')
+  else
+    disp(['Saved to ',fullfile(pathname,filename)])
+    imwrite(outImg2,[pathname,filename]);
+  end
 
   
 % --- Executes on button press in clear2.
@@ -366,6 +378,7 @@ set(handles.dv1,'Visible','off')
 set(handles.dv2,'Visible','off')
 set(handles.dv3,'Visible','off')
 set(handles.dv4,'Visible','off')
+set(handles.clear1,'Enable','off')
 
 % --- Executes on button press in clear1.
 function clear2_Callback(hObject, eventdata, handles)
@@ -384,6 +397,27 @@ set(handles.dv5,'Visible','off')
 set(handles.dv6,'Visible','off')
 set(handles.dv7,'Visible','off')
 set(handles.dv8,'Visible','off')
+set(handles.clear2,'Enable','off')
+
+% --- Executes on button press in htg01.
+function htg01_Callback(hObject, eventdata, handles)
+% hObject    handle to htg01 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global inImg1
+figure('name','Histogram01','numbertitle','off');
+imhist(rgb2gray(inImg1));
+title('Histogram');
+
+% --- Executes on button press in htg02.
+function htg02_Callback(hObject, eventdata, handles)
+% hObject    handle to htg02 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global inImg2
+figure('name','Histogram02','numbertitle','off');
+imhist(rgb2gray(inImg2));
+title('Histogram');
 
 % --- Executes on button press in htg1.
 function htg1_Callback(hObject, eventdata, handles)
@@ -404,6 +438,7 @@ global outImg2
 figure('name','Histogram2','numbertitle','off');
 imhist(outImg2);
 title('Histogram');
+
 
 % --- Executes on selection change in pop1.
 function pop1_Callback(hObject, eventdata, handles)
@@ -427,7 +462,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
 % --- Executes on selection change in pop2.
 function pop2_Callback(hObject, eventdata, handles)
 % hObject    handle to pop2 (see GCBO)
@@ -436,7 +470,6 @@ function pop2_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns pop2 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from pop2
-
 
 % --- Executes during object creation, after setting all properties.
 function pop2_CreateFcn(hObject, eventdata, handles)
