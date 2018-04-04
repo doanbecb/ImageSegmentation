@@ -22,9 +22,9 @@ function varargout = ImageSegmentation(varargin)
 
 % Edit the above text to modify the response to help ImageSegmentation
 
-% Last Modified by GUIDE v2.5 04-Jan-2018 07:43:03
+% Last Modified by GUIDE v2.5 03-Apr-2018 13:10:22
 
-% Begin initialization code - DO1 NOT EDIT
+% Begin initialization code - result03 NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
@@ -41,7 +41,7 @@ if nargout
 else
     gui_mainfcn(gui_State, varargin{:});
 end
-% End initialization code - DO1 NOT EDIT
+% End initialization code - result03 NOT EDIT
 
 
 % --- Executes just before ImageSegmentation is made visible.
@@ -136,96 +136,194 @@ function process1_Callback(hObject, eventdata, handles)
 global inImg1 outImg1
 inImg = inImg1;
 nBins = 5;
-winSize = 7;
+winSize = 5;
 pop1 = get(handles.pop1,'value');
+
 switch pop1
     case 1
-    nClass = 2;
-    set(handles.do1,'Visible','on')%255
-    set(handles.dv1,'Visible','on')
-    
-    set(handles.vang1,'Visible','off')
-    set(handles.dv2,'Visible','off')
-    
-    set(handles.xanh1,'Visible','off')
-    set(handles.dv3,'Visible','off')
-    
-    set(handles.sanh1,'Visible','on')%128
-    set(handles.dv4,'Visible','on')
+        nClass = 2;
     case 2
-    nClass = 3;
-    set(handles.do1,'Visible','on')%255
-    set(handles.dv1,'Visible','on')
-    set(handles.vang1,'Visible','on')%170
-    set(handles.dv2,'Visible','on')
-    set(handles.xanh1,'Visible','on')%85
-    set(handles.dv3,'Visible','on')
-    set(handles.sanh1,'Visible','off')
-    set(handles.dv4,'Visible','off')
+        nClass = 3;
     case 3
-    nClass = 4;
-    set(handles.do1,'Visible','on')%255
-    set(handles.dv1,'Visible','on')
-    set(handles.vang1,'Visible','on')%191
-    set(handles.dv2,'Visible','on')
-    set(handles.xanh1,'Visible','on')%64
-    set(handles.dv3,'Visible','on')
-    set(handles.sanh1,'Visible','on')%128
-    set(handles.dv4,'Visible','on')
+        nClass = 4;
+    case 4
+        nClass = 5;
+    case 5
+        nClass = 6;
 end
 
+tic;
 outImg1 = ImgSeg(inImg, nBins, winSize, nClass);
+toc;
+set(handles.time1,'string',toc);
 axes(handles.axes2)
 imshow(outImg1);
 colormap('default');
 
-d = 0;%255
-dc = 0;%191
-v = 0;%170
-x = 0;%128
-s = 0;%85
-g = 0;%64
+index255 = 0;%255
+index213 = 0;%213
+index204 = 0;%201
+index191 = 0;%191
+index170 = 0;%170
+index153 = 0;%153
+index128 = 0;%128
+index102 = 0;%102
+index85 = 0;%85
+index64 = 0;%64
+index51 = 0;%51
+index43 = 0;%43
+
 for r = 1:size(outImg1,1)
     for c = 1:size(outImg1,2)
-switch outImg1(r,c)
-    %mau do
-    case 255
-    d = d + 1;
-    %mau da cam
-    case 191
-    dc = dc + 1;
-    %mau vang
-    case 170
-    v = v + 1;
-    %mau xanh
-    case 128
-    x = x + 1;
-    %mau xanh green
-    case 85
-    s = s + 1;
-    %mau xanh blue
-    case 64
-    g = g + 1;
-end
+        switch outImg1(r,c)
+            case 255
+            index255 = index255 + 1;
+
+            case 213
+            index213 = index213 + 1;
+
+            case 204
+            index204 = index204 + 1;
+
+            case 191
+            index191 = index191 + 1;
+
+            case 170
+            index170 = index170 + 1;
+
+            case 153
+            index153 = index153 + 1;
+
+            case 128
+            index128 = index128 + 1;
+
+            case 102
+            index102 = index102 + 1;
+
+            case 85
+            index85 = index85 + 1;
+
+            case 64
+            index64 = index64 + 1;
+
+            case 51
+            index51 = index51 + 1;
+
+            case 43
+            index43 = index43 + 1;
+        end
     end
 end
 
-set(handles.do1,'string',100*d/(r*c));
-if dc == 0
-    set(handles.vang1,'string',100*v/(r*c));
-else set(handles.vang1,'string',100*dc/(r*c));
+switch pop1
+    case 1
+        set(handles.result01,'Visible','on')
+        set(handles.result01,'BackgroundColor',[128 0 0]/256)
+        set(handles.result01,'string',100*index255/(r*c));
+        
+        set(handles.result02,'Visible','on')
+        set(handles.result02,'BackgroundColor',[143 255 112]/256)
+        set(handles.result02,'string',100*index128/(r*c));
+    
+        set(handles.result03,'Visible','off')
+    
+        set(handles.result04,'Visible','off')
+
+        set(handles.result05,'Visible','off')
+
+        set(handles.result06,'Visible','off')
+
+    case 2
+        set(handles.result01,'Visible','on')
+        set(handles.result01,'BackgroundColor',[128 0 0]/256)
+        set(handles.result01,'string',100*index255/(r*c));
+        
+        set(handles.result02,'Visible','on')
+        set(handles.result02,'BackgroundColor',[255 207 0]/256)
+        set(handles.result02,'string',100*index170/(r*c));
+    
+        set(handles.result03,'Visible','on')
+        set(handles.result03,'BackgroundColor',[0 223 255]/256)
+        set(handles.result03,'string',100*index85/(r*c));
+    
+        set(handles.result04,'Visible','off')
+
+        set(handles.result05,'Visible','off')
+
+        set(handles.result06,'Visible','off')
+        
+    case 3
+        set(handles.result01,'Visible','on')
+        set(handles.result01,'BackgroundColor',[128 0 0]/256)
+        set(handles.result01,'string',100*index255/(r*c));
+        
+        set(handles.result02,'Visible','on')
+        set(handles.result02,'BackgroundColor',[255 128 0]/256)
+        set(handles.result02,'string',100*index191/(r*c));
+    
+        set(handles.result03,'Visible','on')
+        set(handles.result03,'BackgroundColor',[143 255 112]/256)
+        set(handles.result03,'string',100*index128/(r*c));
+    
+        set(handles.result04,'Visible','on')
+        set(handles.result04,'BackgroundColor',[0 143 255]/256)
+        set(handles.result04,'string',100*index64/(r*c));
+
+        set(handles.result05,'Visible','off')
+
+        set(handles.result06,'Visible','off')
+        
+    case 4
+        set(handles.result01,'Visible','on')
+        set(handles.result01,'BackgroundColor',[128 0 0]/256)
+        set(handles.result01,'string',100*index255/(r*c));
+        
+        set(handles.result02,'Visible','on')
+        set(handles.result02,'BackgroundColor',[255 64 0]/256)
+        set(handles.result02,'string',100*index204/(r*c));
+    
+        set(handles.result03,'Visible','on')
+        set(handles.result03,'BackgroundColor',[239 255 16]/256)
+        set(handles.result03,'string',100*index153/(r*c));
+    
+        set(handles.result04,'Visible','on')
+        set(handles.result04,'BackgroundColor',[0 80 255]/256)
+        set(handles.result04,'string',100*index51/(r*c));
+
+        set(handles.result05,'Visible','on')
+        set(handles.result05,'BackgroundColor',[32 255 223]/256)
+        set(handles.result05,'string',100*index102/(r*c));
+
+        set(handles.result06,'Visible','off')
+        
+    case 5     
+        set(handles.result01,'Visible','on')
+        set(handles.result01,'BackgroundColor',[128 0 0]/256)
+        set(handles.result01,'string',100*index255/(r*c));
+        
+        set(handles.result02,'Visible','on')
+        set(handles.result02,'BackgroundColor',[255 207 0]/256)
+        set(handles.result02,'string',100*index170/(r*c));
+    
+        set(handles.result03,'Visible','on')
+        set(handles.result03,'BackgroundColor',[255 32 0]/256)
+        set(handles.result03,'string',100*index213/(r*c));
+    
+        set(handles.result04,'Visible','on')
+        set(handles.result04,'BackgroundColor',[0 48 255]/256)
+        set(handles.result04,'string',100*index43/(r*c));
+
+        set(handles.result05,'Visible','on')
+        set(handles.result05,'BackgroundColor',[143 255 112]/256)
+        set(handles.result05,'string',100*index128/(r*c));
+
+        set(handles.result06,'Visible','on')
+        set(handles.result06,'BackgroundColor',[0 223 255]/256)
+        set(handles.result06,'string',100*index85/(r*c));
 end
-
-if s == 0
-    set(handles.xanh1,'string',100*g/(r*c));
-else set(handles.xanh1,'string',100*s/(r*c));
-end
-
-set(handles.sanh1,'string',100*x/(r*c));
-
-set(handles.save1,'Enable','on')
-set(handles.clear1,'Enable','on')
-set(handles.htg1,'Enable','on')
+ set(handles.save1,'Enable','on')
+ set(handles.clear1,'Enable','on')
+ set(handles.htg1,'Enable','on')
 
 % --- Executes on button press in process2.
 function process2_Callback(hObject, eventdata, handles)
@@ -236,89 +334,193 @@ function process2_Callback(hObject, eventdata, handles)
 global inImg2 outImg2
 inImg = inImg2;
 nBins = 5;
-winSize = 7;
+winSize = 5;
 pop2 = get(handles.pop2,'value');
+
 switch pop2
     case 1
-    nClass = 2;
-    set(handles.do2,'Visible','on')%255
-    set(handles.dv5,'Visible','on')
-    set(handles.vang2,'Visible','off')
-    set(handles.dv6,'Visible','off')
-    set(handles.xanh2,'Visible','off')
-    set(handles.dv7,'Visible','off')
-    set(handles.sanh2,'Visible','on')%128
-    set(handles.dv8,'Visible','on')
+        nClass = 2;
     case 2
-    nClass = 3;
-    set(handles.do2,'Visible','on')%255
-    set(handles.dv5,'Visible','on')
-    set(handles.vang2,'Visible','on')%170
-    set(handles.dv6,'Visible','on')
-    set(handles.xanh2,'Visible','on')%85
-    set(handles.dv7,'Visible','on')
-    set(handles.sanh2,'Visible','off')
-    set(handles.dv8,'Visible','off')
+        nClass = 3;
     case 3
-    nClass = 4;
-    set(handles.do2,'Visible','on')%255
-    set(handles.dv5,'Visible','on')
-    set(handles.vang2,'Visible','on')%191
-    set(handles.dv6,'Visible','on')
-    set(handles.xanh2,'Visible','on')%64
-    set(handles.dv7,'Visible','on')
-    set(handles.sanh2,'Visible','on')%128
-    set(handles.dv8,'Visible','on')
+        nClass = 4;
+    case 4
+        nClass = 5;
+    case 5
+        nClass = 6;
 end
 
+tic;
 outImg2 = ImgSeg(inImg, nBins, winSize, nClass);
+toc;
+set(handles.time2,'string',toc);
 axes(handles.axes4)
 imshow(outImg2);
 colormap('default');
 
-d = 0;%255
-dc = 0;%191
-v = 0;%170
-x = 0;%128
-s = 0;%85
-g = 0;%64
+index255 = 0;%255
+index213 = 0;%213
+index204 = 0;%201
+index191 = 0;%191
+index170 = 0;%170
+index153 = 0;%153
+index128 = 0;%128
+index102 = 0;%102
+index85 = 0;%85
+index64 = 0;%64
+index51 = 0;%51
+index43 = 0;%43
+
+
 for r = 1:size(outImg2,1)
     for c = 1:size(outImg2,2)
-switch outImg2(r,c)
-    %mau do
-    case 255
-    d = d + 1;
-    %mau da cam
-    case 191
-    dc = dc + 1;
-    %mau vang
-    case 170
-    v = v + 1;
-    %mau xanh
-    case 128
-    x = x + 1;
-    %mau xanh green
-    case 85
-    s = s + 1;
-    %mau xanh blue
-    case 64
-    g = g + 1;
-end
+        switch outImg2(r,c)
+            case 255
+            index255 = index255 + 1;
+
+            case 213
+            index213 = index213 + 1;
+
+            case 204
+            index204 = index204 + 1;
+
+            case 191
+            index191 = index191 + 1;
+
+            case 170
+            index170 = index170 + 1;
+
+            case 153
+            index153 = index153 + 1;
+
+            case 128
+            index128 = index128 + 1;
+
+            case 102
+            index102 = index102 + 1;
+
+            case 85
+            index85 = index85 + 1;
+
+            case 64
+            index64 = index64 + 1;
+
+            case 51
+            index51 = index51 + 1;
+
+            case 43
+            index43 = index43 + 1;
+        end
     end
 end
 
-set(handles.do2,'string',100*d/(r*c));
-if dc == 0
-    set(handles.vang2,'string',100*v/(r*c));
-else set(handles.vang2,'string',100*dc/(r*c));
-end
 
-if s == 0
-    set(handles.xanh2,'string',100*g/(r*c));
-else set(handles.xanh2,'string',100*s/(r*c));
-end
+switch pop2
+    case 1
+        set(handles.result11,'Visible','on')
+        set(handles.result11,'BackgroundColor',[128 0 0]/256)
+        set(handles.result11,'string',100*index255/(r*c));
+        
+        set(handles.result12,'Visible','on')
+        set(handles.result12,'BackgroundColor',[143 255 112]/256)
+        set(handles.result12,'string',100*index128/(r*c));
+    
+        set(handles.result13,'Visible','off')
+    
+        set(handles.result14,'Visible','off')
 
-set(handles.sanh2,'string',100*x/(r*c));
+        set(handles.result15,'Visible','off')
+
+        set(handles.result16,'Visible','off')
+
+    case 2
+        set(handles.result11,'Visible','on')
+        set(handles.result11,'BackgroundColor',[128 0 0]/256)
+        set(handles.result11,'string',100*index255/(r*c));
+        
+        set(handles.result12,'Visible','on')
+        set(handles.result12,'BackgroundColor',[255 207 0]/256)
+        set(handles.result12,'string',100*index170/(r*c));
+    
+        set(handles.result13,'Visible','on')
+        set(handles.result13,'BackgroundColor',[0 223 255]/256)
+        set(handles.result13,'string',100*index85/(r*c));
+    
+        set(handles.result14,'Visible','off')
+
+        set(handles.result15,'Visible','off')
+
+        set(handles.result16,'Visible','off')
+        
+    case 3
+        set(handles.result11,'Visible','on')
+        set(handles.result11,'BackgroundColor',[128 0 0]/256)
+        set(handles.result11,'string',100*index255/(r*c));
+        
+        set(handles.result12,'Visible','on')
+        set(handles.result12,'BackgroundColor',[255 128 0]/256)
+        set(handles.result12,'string',100*index191/(r*c));
+    
+        set(handles.result13,'Visible','on')
+        set(handles.result13,'BackgroundColor',[143 255 112]/256)
+        set(handles.result13,'string',100*index128/(r*c));
+    
+        set(handles.result14,'Visible','on')
+        set(handles.result14,'BackgroundColor',[0 143 255]/256)
+        set(handles.result14,'string',100*index64/(r*c));
+
+        set(handles.result15,'Visible','off')
+
+        set(handles.result16,'Visible','off')
+        
+    case 4
+        set(handles.result11,'Visible','on')
+        set(handles.result11,'BackgroundColor',[128 0 0]/256)
+        set(handles.result11,'string',100*index255/(r*c));
+        
+        set(handles.result12,'Visible','on')
+        set(handles.result12,'BackgroundColor',[255 64 0]/256)
+        set(handles.result12,'string',100*index204/(r*c));
+    
+        set(handles.result13,'Visible','on')
+        set(handles.result13,'BackgroundColor',[239 255 16]/256)
+        set(handles.result13,'string',100*index153/(r*c));
+    
+        set(handles.result14,'Visible','on')
+        set(handles.result14,'BackgroundColor',[0 80 255]/256)
+        set(handles.result14,'string',100*index51/(r*c));
+
+        set(handles.result15,'Visible','on')
+        set(handles.result15,'BackgroundColor',[32 255 223]/256)
+        set(handles.result15,'string',100*index102/(r*c));
+
+        set(handles.result16,'Visible','off')
+        
+    case 5     
+        set(handles.result11,'Visible','on')
+        set(handles.result11,'BackgroundColor',[128 0 0]/256)
+        set(handles.result11,'string',100*index255/(r*c));
+        
+        set(handles.result12,'Visible','on')
+        set(handles.result12,'BackgroundColor',[255 207 0]/256)
+        set(handles.result12,'string',100*index170/(r*c));
+    
+        set(handles.result13,'Visible','on')
+        set(handles.result13,'BackgroundColor',[255 32 0]/256)
+        set(handles.result13,'string',100*index213/(r*c));
+    
+        set(handles.result14,'Visible','on')
+        set(handles.result14,'BackgroundColor',[0 48 255]/256)
+        set(handles.result14,'string',100*index43/(r*c));
+
+        set(handles.result15,'Visible','on')
+        set(handles.result15,'BackgroundColor',[143 255 112]/256)
+        set(handles.result15,'string',100*index128/(r*c));
+
+        set(handles.result16,'Visible','on')
+        set(handles.result16,'BackgroundColor',[0 223 255]/256)
+        set(handles.result16,'string',100*index85/(r*c));
+end
 
 set(handles.save2,'Enable','on')
 set(handles.clear2,'Enable','on')
@@ -368,16 +570,15 @@ function clear1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 axes(handles.axes2);
 cla reset;
+set(handles.time1,'string',0)
 set(handles.save1,'Enable','off')
 set(handles.htg1,'Enable','off')
-set(handles.do1,'Visible','off')%255
-set(handles.vang1,'Visible','off')%191
-set(handles.xanh1,'Visible','off')%128
-set(handles.sanh1,'Visible','off')%64
-set(handles.dv1,'Visible','off')
-set(handles.dv2,'Visible','off')
-set(handles.dv3,'Visible','off')
-set(handles.dv4,'Visible','off')
+set(handles.result01,'Visible','off')
+set(handles.result02,'Visible','off')
+set(handles.result03,'Visible','off')
+set(handles.result04,'Visible','off')
+set(handles.result05,'Visible','off')
+set(handles.result06,'Visible','off')
 set(handles.clear1,'Enable','off')
 
 % --- Executes on button press in clear1.
@@ -387,16 +588,15 @@ function clear2_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 axes(handles.axes4);
 cla reset;
+set(handles.time2,'string',0)
 set(handles.save2,'Enable','off')
 set(handles.htg2,'Enable','off')
-set(handles.do2,'Visible','off')%255
-set(handles.vang2,'Visible','off')%191
-set(handles.xanh2,'Visible','off')%128
-set(handles.sanh2,'Visible','off')%64
-set(handles.dv5,'Visible','off')
-set(handles.dv6,'Visible','off')
-set(handles.dv7,'Visible','off')
-set(handles.dv8,'Visible','off')
+set(handles.result11,'Visible','off')
+set(handles.result12,'Visible','off')
+set(handles.result13,'Visible','off')
+set(handles.result14,'Visible','off')
+set(handles.result15,'Visible','off')
+set(handles.result16,'Visible','off')
 set(handles.clear2,'Enable','off')
 
 % --- Executes on button press in htg01.
